@@ -59,13 +59,14 @@
         var options = $.extend({
             selector:       'a[data-imagelightbox]',
             id:             'imagelightbox',
-            allowedTypes:   'png|jpg|jpeg||gif', // TODO make it work again
+            allowedTypes:   'png|jpg|jpeg|gif', 
             animationSpeed: 250,
             activity:       false,
             arrows:         false,
             button:         false,
             caption:        false,
             enableKeyboard: true,
+            importAttrs:    { 'href': 'src', 'data-lightbox': 'src', 'srcset': 'srcset', 'sizes': 'sizes' },
             navigation:     false,
             overlay:        false,
             preloadNext:    true,
@@ -194,7 +195,7 @@
                 $('#imagelightbox-caption').remove();
             },
             navigationOn = function (instance, selector) {
-                var images = $(selector);
+                var images = $(selector).not('.imagelightbox-invalid');
                 if (images.length) {
                     var nav = $('<div id="imagelightbox-nav"></div>');
                     for (var i = 0; i < images.length; i++) {
@@ -257,14 +258,6 @@
             swipeDiff = 0,
             inProgress = false,
 
-            /* TODO make it work again
-            isTargetValid = function (element) {
-                var classic = $(element).prop('tagName').toLowerCase() === 'a' && ( new RegExp('.(' + options.allowedTypes + ')$', 'i') ).test($(element).attr('href'));
-                var html5 = $(element).attr('data-lightbox') !== undefined;
-                return classic || html5;
-            },
-            */
-
             setImage = function () {
                 if (!image.length) {
                     return true;
@@ -275,7 +268,7 @@
                     screenHeight = wHeight * 0.9,
                     tmpImage = new Image();
 
-                tmpImage.src = image.attr('src');
+                tmpImage.src = image.prop('currentSrc') || image.prop('src');
                 tmpImage.onload = function () {
                     imageWidth = tmpImage.width;
                     imageHeight = tmpImage.height;
@@ -322,15 +315,10 @@
                 }
 
                 setTimeout(function () {
-                    var imgPath = target.attr('href');
-                    // if ( imgPath === undefined ) {
-                    //     imgPath = target.attr( 'data-lightbox' );
-                    // }
-                    image = $('<img id="' + options.id + '" />')
-                        .attr('src', imgPath)
+
+                    image = transferImageAttrs($('<img id="' + options.id + '" />'), target)
                         .on('load', function () {
                             var params = {'opacity': 1};
-
                             image.appendTo('body');
                             setImage();
                             image.css('opacity', 0);
@@ -356,7 +344,7 @@
                                 if (!nextTarget.length) {
                                     nextTarget = targets.eq(0);
                                 }
-                                $('<img />').attr('src', nextTarget.attr('href'));
+                                transferImageAttrs($('<img />'), nextTarget);
                             }
                         })
                         .on('error', function () {
@@ -429,6 +417,15 @@
                 }, options.animationSpeed + 100);
             },
 
+            transferImageAttrs = function (img, target) {
+                $.each(options.importAttrs, function(k,v) {
+                    if (target.is('['+k+']')) {
+                        img.attr(v, target.attr(k));
+                    }
+                });
+                return img;
+            },
+
             loadPreviousImage = function () {
                 if (options.previousTarget() !== false) {
                     loadImage('left');
@@ -476,13 +473,24 @@
 
             addTargets = function( newTargets ) {
                 newTargets.each(function () {
+                    if (options.allowedTypes && !validateTarget($(this))) {
+                        return false;
+                    }
                     targets = targets.add($(this));
                 });
-
                 newTargets.on('click', function (e) {
                     e.preventDefault();
                     openLightbox($(this));
                 });
+            }, 
+
+            validateTarget = function( target ) {
+                var testSrc = transferImageAttrs($('<blink>'), target).attr('src');
+                if (! new RegExp('.(' + options.allowedTypes + ')$', 'i').test(testSrc)) {
+                    target.addClass('imagelightbox-invalid');
+                    return false;
+                }
+                return true;
             };
 
         this.startImageLightbox = function () {
