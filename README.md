@@ -35,15 +35,16 @@ The list of options and their default values is:
 
 ````javascript
 $( selector ).imageLightbox({                                     
-    selector:       'a[data-imagelightbox]', // string;
+    selector:       'a[data-imagelightbox]', // string;          this is required if navigation is true
     id:             'imagelightbox',         // string;
-    allowedTypes:   'png|jpg|jpeg||gif',     // string; * NOT WORKING ATM *
+    allowedTypes:   'png|jpg|jpeg|gif',      // string;          only include selectors matching this regex
     animationSpeed: 250,                     // integer;
     activity:       false,                   // bool;            show activity indicator
     arrows:         false,                   // bool;            show left/right arrows
     button:         false,                   // bool;            show close button
     caption:        false,                   // bool;            show captions
     enableKeyboard: true,                    // bool;            enable keyboard shortcuts (arrows Left/Right and Esc)
+    importAttrs:    { 'href': 'src' },       // object           map these attributes from the target to the associated image
     navigation:     false,                   // bool;            show navigation
     overlay:        false,                   // bool;            display the lightbox as an overlay
     preloadNext:    true,                    // bool;            silently preload the next image
@@ -93,6 +94,29 @@ imageLightBox allows adding more images dynamically at runtime
         gallery.addToImageLightbox( image );
     });
 </script>  
+````
+
+## Passing parameters to lightbox images
+
+`importAttrs` is a map of attributes to transfer from the target defined by `$(selector)` to the displayed image
+By default this maps the `href` of a link to the lightbox image `src`. To extend this to provide device optimised images via 
+the HTML5 `srcset` and `sizes` attributes you could use the example below.
+
+This can also be used to add `alt` or (schema.org) microdata tags 
+
+###### Example:
+
+````javascript
+<script src="jquery.js"></script>
+<script src="imagelightbox.js"></script>
+<script>
+    $( function()
+    {
+        var gallery = $( selector ).imageLightbox({
+            importAttrs: { href: "src", srcset: "srcset", sizes: "sizes" }
+        });
+    });
+</script>
 ````
                         
 ## Changelog

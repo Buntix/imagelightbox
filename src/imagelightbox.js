@@ -66,7 +66,7 @@
             button:         false,
             caption:        false,
             enableKeyboard: true,
-            importAttrs:    { 'href': 'src', 'data-lightbox': 'src', 'srcset': 'srcset', 'sizes': 'sizes' },
+            importAttrs:    { 'href': 'src' },
             navigation:     false,
             overlay:        false,
             preloadNext:    true,
