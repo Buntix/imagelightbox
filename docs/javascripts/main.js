@@ -8,7 +8,8 @@ $(document).ready(function() {
     });
 
     $('a[data-imagelightbox="c"]').imageLightbox({
-        button: true
+        button: true,
+        quitOnDocClick: false
     });
 
     $('a[data-imagelightbox="d"]').imageLightbox({
@@ -30,6 +31,7 @@ $(document).ready(function() {
         caption: true,
         navigation: true,
         overlay: true,
+        quitOnDocClick: false,
         selector: 'a[data-imagelightbox="f"]'
     });
 
@@ -44,31 +46,11 @@ $(document).ready(function() {
         var li = $('<li></li>').appendTo( adding_ul );
         var a = $("<a></a>")
             .attr('data-imagelightbox',"add")
-            .attr('href', "http://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/full/4.jpg")
+            .attr('href', "images/demo4.jpg")
             .appendTo( li );
         $("<img />")
-            .attr("src", "images/4.jpg")
-            .attr("alt", "Sun, grass and hydrant")
+            .attr("src", "images/thumb4.jpg")
             .appendTo( a );
-        li = $('<li></li>').appendTo( adding_ul );
-        a = $("<a></a>")
-            .attr('data-imagelightbox',"add")
-            .attr('href', "http://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/full/5.jpg")
-            .appendTo( li );
-        $("<img />")
-            .attr("src", "images/5.jpg")
-            .attr("alt", "Sun, grass and hydrant")
-            .appendTo( a );
-        li = $('<li></li>').appendTo( adding_ul );
-        a = $("<a></a>")
-            .attr('data-imagelightbox',"add")
-            .attr('href', "http://osvaldas.info/examples/image-lightbox-responsive-touch-friendly/full/6.jpg")
-            .appendTo( li );
-        $("<img />")
-            .attr("src", "images/6.jpg")
-            .attr("alt", "Sun, grass and hydrant")
-            .appendTo( a );
-
         // dynamically adding
         instanceI.addToImageLightbox( $("a[data-imagelightbox='add']") );
     });

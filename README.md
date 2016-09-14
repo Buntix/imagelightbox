@@ -121,5 +121,6 @@ This can also be used to add `alt` or (schema.org) microdata tags
                         
 ## Changelog
 
+* 0.5.2 Updates to demo page, cleanups
 * 0.5.1 Fix startImageLightbox
 * 0.5.0 Support jQuery3
