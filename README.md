@@ -102,7 +102,6 @@ imageLightBox allows adding more images dynamically at runtime
 By default this maps the `href` of a link to the lightbox image `src`. To extend this to provide device optimised images via 
 the HTML5 `srcset` and `sizes` attributes you could use the example below.
 
-This can also be used to add `alt` or (schema.org) microdata tags 
 
 ###### Example:
 
